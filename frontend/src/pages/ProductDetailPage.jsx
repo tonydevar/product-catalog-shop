@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import RatingStars from '../components/RatingStars.jsx';
 import ProductCard from '../components/ProductCard.jsx';
+import QuantitySelector from '../components/QuantitySelector.jsx';
 import styles from './ProductDetailPage.module.css';
 
 export default function ProductDetailPage() {
@@ -12,6 +13,7 @@ export default function ProductDetailPage() {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     setLoading(true);
@@ -26,9 +28,14 @@ export default function ProductDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  // Reset quantity to 1 whenever the product id changes
+  useEffect(() => {
+    setQuantity(1);
+  }, [id]);
+
   function handleAddToCart() {
     if (!product) return;
-    dispatch({ type: 'addItem', payload: product });
+    dispatch({ type: 'addItem', payload: { ...product, quantity } });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   }
@@ -64,6 +71,14 @@ export default function ProductDetailPage() {
               <span key={tag} className={styles.tag}>{tag}</span>
             ))}
           </div>
+          {product.stock > 0 && (
+            <QuantitySelector
+              value={quantity}
+              min={1}
+              max={product.stock}
+              onChange={setQuantity}
+            />
+          )}
           <button
             className={styles.addBtn}
             onClick={handleAddToCart}
