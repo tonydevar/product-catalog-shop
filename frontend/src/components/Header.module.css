@@ -23,6 +23,7 @@
   white-space: nowrap;
   color: var(--color-primary);
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .searchForm {
@@ -60,18 +61,27 @@
 
 .nav {
   margin-left: auto;
+  flex-shrink: 0;
 }
 
-.cartLink {
+.cartBtn {
   position: relative;
+  background: none;
+  border: none;
   display: flex;
   align-items: center;
   padding: 6px 8px;
-  text-decoration: none;
+  border-radius: var(--radius);
+  transition: background 0.15s;
+}
+
+.cartBtn:hover {
+  background: var(--color-bg);
 }
 
 .cartIcon {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
 .badge {

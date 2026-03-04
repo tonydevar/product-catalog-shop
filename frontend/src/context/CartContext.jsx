@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useState, useEffect } from 'react';
 
 const CartContext = createContext(null);
 
@@ -29,11 +29,13 @@ function cartReducer(state, action) {
     case 'removeItem':
       return state.filter(item => item.id !== action.payload);
     case 'updateQuantity':
-      return state.map(item =>
-        item.id === action.payload.id
-          ? { ...item, quantity: action.payload.quantity }
-          : item
-      ).filter(item => item.quantity > 0);
+      return state
+        .map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: action.payload.quantity }
+            : item
+        )
+        .filter(item => item.quantity > 0);
     case 'clearCart':
       return [];
     default:
@@ -43,6 +45,7 @@ function cartReducer(state, action) {
 
 export function CartProvider({ children }) {
   const [items, dispatch] = useReducer(cartReducer, [], loadCart);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
@@ -51,8 +54,21 @@ export function CartProvider({ children }) {
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  function openPanel() { setIsPanelOpen(true); }
+  function closePanel() { setIsPanelOpen(false); }
+  function togglePanel() { setIsPanelOpen(v => !v); }
+
   return (
-    <CartContext.Provider value={{ items, dispatch, cartCount, cartTotal }}>
+    <CartContext.Provider value={{
+      items,
+      dispatch,
+      cartCount,
+      cartTotal,
+      isPanelOpen,
+      openPanel,
+      closePanel,
+      togglePanel,
+    }}>
       {children}
     </CartContext.Provider>
   );

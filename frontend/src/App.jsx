@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext.jsx';
 import Header from './components/Header.jsx';
+import CartPanel from './components/CartPanel.jsx';
 import ProductListingPage from './pages/ProductListingPage.jsx';
 import ProductDetailPage from './pages/ProductDetailPage.jsx';
 import CartPage from './pages/CartPage.jsx';
@@ -27,6 +28,7 @@ function AppShell() {
   return (
     <>
       <Header search={search} onSearchChange={handleSearchChange} />
+      <CartPanel />
       <Routes>
         <Route
           path="/"
