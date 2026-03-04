@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import styles from './Header.module.css';
 
-export default function Header({ search, onSearchChange }) {
+export default function Header({ search, onSearchChange, onCartClick }) {
   const { cartCount } = useCart();
-  const navigate = useNavigate();
 
   function handleSearchSubmit(e) {
     e.preventDefault();
@@ -33,12 +32,17 @@ export default function Header({ search, onSearchChange }) {
         </form>
 
         <nav className={styles.nav}>
-          <Link to="/cart" className={styles.cartLink} aria-label={`Cart, ${cartCount} items`}>
+          <button
+            className={styles.cartBtn}
+            onClick={onCartClick}
+            aria-label={`Open cart, ${cartCount} item${cartCount !== 1 ? 's' : ''}`}
+            type="button"
+          >
             <span className={styles.cartIcon}>🛒</span>
             {cartCount > 0 && (
               <span className={styles.badge} aria-hidden="true">{cartCount}</span>
             )}
-          </Link>
+          </button>
         </nav>
       </div>
     </header>

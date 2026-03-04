@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext.jsx';
 import Header from './components/Header.jsx';
+import CartPanel from './components/CartPanel.jsx';
 import ProductListingPage from './pages/ProductListingPage.jsx';
 import ProductDetailPage from './pages/ProductDetailPage.jsx';
 import CartPage from './pages/CartPage.jsx';
@@ -9,6 +10,7 @@ import CartPage from './pages/CartPage.jsx';
 function AppShell() {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [cartOpen, setCartOpen] = useState(false);
   const debounceRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,7 +28,15 @@ function AppShell() {
 
   return (
     <>
-      <Header search={search} onSearchChange={handleSearchChange} />
+      <Header
+        search={search}
+        onSearchChange={handleSearchChange}
+        onCartClick={() => setCartOpen(true)}
+      />
+      <CartPanel
+        isOpen={cartOpen}
+        onClose={() => setCartOpen(false)}
+      />
       <Routes>
         <Route
           path="/"
